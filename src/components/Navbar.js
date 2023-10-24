@@ -5,8 +5,16 @@ import { BiVideoPlus } from "react-icons/bi";
 import { FaRegBell } from "react-icons/fa";
 import logo from "../assets/yt-logo-white.png";
 import { Link } from "react-router-dom";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { auth, provider } from "../firebase";
 
 const Navbar = () => {
+
+  const handleLogin = async () => {
+    const response = await signInWithPopup(auth, provider);
+    console.log(response);
+    // dispatch(setUser(response.user));
+  };
   return (
     <div className="bg-yt-black h-14 flex items-center pl-4 pr-5 justify-between fixed w-full z-10">
       <div className="flex justify-between items-center">
@@ -47,7 +55,8 @@ const Navbar = () => {
             <FaRegBell size={20} className="text-center text-yt-white" />
           </div>
           <div className="mx-3 items-center cursor-pointer">
-            <button className="bg-yt-red py-1 px-4 text-yt-white rounded-md">
+            <button className="bg-yt-red py-1 px-4 text-yt-white rounded-md"
+            onClick={handleLogin}>
               Sign in
             </button>
           </div>
