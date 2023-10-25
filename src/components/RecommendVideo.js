@@ -1,7 +1,7 @@
 import React from "react";
 import { MdVerified } from "react-icons/md";
 
-const RecommendVideo = ({ thumbnail, title, channel, views, uploadTime }) => {
+const RecommendVideo = ({ thumbnail, name, channel, views, uploadTime }) => {
   return (
     <div className="text-yt-white flex cursor-pointer">
       <img
@@ -11,7 +11,7 @@ const RecommendVideo = ({ thumbnail, title, channel, views, uploadTime }) => {
       />
       <div className="pl-2">
         <h2 className="text-sm font-medium">
-          {title.length <= 70 ? title : `${title.substr(0, 60)}...`}
+          {name.length <= 70 ? name : `${name.substr(0, 60)}...`}
         </h2>
         <p className="text-xs text-yt-gray pt-2 flex items-center">
           {channel}
