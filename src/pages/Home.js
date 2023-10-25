@@ -3,14 +3,17 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 
 import Sidebar from '../components/Sidebar'
 import { CategoryItems } from '../static/data'
-import { db } from '../firebase'
+import { auth, db } from '../firebase'
 import { Link } from "react-router-dom";
 import Video from "../components/Video";
+import { onAuthStateChanged } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
 
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const q = query(collection(db, "videos"));
@@ -25,15 +28,16 @@ const Home = () => {
   }, []);
   // console.log(videos)
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       dispatch(setUser(user));
-  //     } else {
-  //       dispatch(setUser(null));
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(setUser(user));
+      } else { 
+        dispatch(setUser(null));
+      }
+    });
+    // eslint-disable-next-line
+  }, []);
   return (
     <div>
       <Sidebar/>

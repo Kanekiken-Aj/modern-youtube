@@ -5,16 +5,29 @@ import { BiVideoPlus } from "react-icons/bi";
 import { FaRegBell } from "react-icons/fa";
 import logo from "../assets/yt-logo-white.png";
 import { Link } from "react-router-dom";
-import { signInWithPopup, signOut } from "firebase/auth";
+import { signInWithPopup, signOut} from "firebase/auth";
 import { auth, provider } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import {getUser, setUser, logout} from "../slices/userSlice";
+
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const user = useSelector(getUser);
 
   const handleLogin = async () => {
     const response = await signInWithPopup(auth, provider);
-    console.log(response);
-    // dispatch(setUser(response.user));
+    // console.log(response);
+    dispatch(setUser(response.user));
   };
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    // the next line helps in logout else after refresh it will be automatically re logged in
+    await signOut(auth);
+  };
+
+  console.log("user", user)
   return (
     <div className="bg-yt-black h-14 flex items-center pl-4 pr-5 justify-between fixed w-full z-10">
       <div className="flex justify-between items-center">
@@ -55,10 +68,21 @@ const Navbar = () => {
             <FaRegBell size={20} className="text-center text-yt-white" />
           </div>
           <div className="mx-3 items-center cursor-pointer">
-            <button className="bg-yt-red py-1 px-4 text-yt-white rounded-md"
-            onClick={handleLogin}>
-              Sign in
-            </button>
+          {!user ? (
+              <button
+                className="bg-yt-red py-1 px-4 text-yt-white rounded-md"
+                onClick={handleLogin}
+              >
+                Sign In
+              </button>
+            ) : (
+              <img
+                src={user.photoURL}
+                alt={user.displayName}
+                onClick={handleLogout}
+                className="object-contain rounded-full cursor-pointer w-10 h-10"
+              />
+            )}
           </div>
         </div>
       </div>
